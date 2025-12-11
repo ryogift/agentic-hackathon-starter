@@ -1,6 +1,8 @@
 {
   "name": "Hackathon Starter (Universal + Ruby + TS)",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
   "customizations": {
     "vscode": {
@@ -9,6 +11,7 @@
         "portsAttributes": {
           "3000": { "label": "Rails/Node/Next.js", "onAutoForward": "notify" },
           "5000": { "label": "Python Flask", "onAutoForward": "notify" },
+          "5432": { "label": "PostgreSQL", "onAutoForward": "silent" },
           "8000": { "label": "Python Django/FastAPI", "onAutoForward": "notify" },
           "8080": { "label": "Java/Go", "onAutoForward": "notify" }
         }
