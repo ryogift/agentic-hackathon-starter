@@ -1,0 +1,71 @@
+# Copilot Instructions for シャッフルランチアプリ (Web)
+
+## Project Overview
+
+**シャッフルランチアプリ (Shuffle Lunch)** - 社内メンバー間のコミュニケーション促進のためのWebアプリケーション。
+
+### 主要機能
+- 参加者リストをテキストエリアから入力（改行区切り）
+- 3〜4名のグループにランダム振り分け
+- グループごとにランチ場所をランダム割り当て
+- 結果をSlack用にコピー可能
+
+詳細仕様は `spec.md` を参照。
+
+## Technology Stack
+
+- **Framework**: Ruby on Rails 8.0
+- **Ruby Version**: 3.x
+- **Frontend**: Rails標準（ERB + Hotwire/Turbo）
+- **Database**: SQLite（MVP）
+- **Port**: 3000
+
+## Development Commands
+
+```bash
+# ディレクトリ移動
+cd rails
+
+# 依存関係インストール
+bundle install
+
+# サーバー起動
+bin/rails server -b 0.0.0.0
+
+# コンソール
+bin/rails console
+
+# テスト実行
+bin/rails test
+
+# ルーティング確認
+bin/rails routes
+```
+
+## Architecture
+
+### グループ分けロジック（3〜4名ルール）
+
+| 総人数 | 分け方 |
+|--------|--------|
+| 3名 | 3 |
+| 4名 | 4 |
+| 5名 | 5（特例） |
+| 6名 | 3 + 3 |
+| 7名 | 4 + 3 |
+| 8名 | 4 + 4 |
+| 9名 | 3 + 3 + 3 |
+| 10名 | 4 + 3 + 3 |
+| 11名 | 4 + 4 + 3 |
+
+### 画面構成
+- 1ページ構成（SPA的なUX）
+- 左カラム: 参加者入力、店舗リスト編集、シャッフルボタン
+- 右カラム: グループ結果カード表示、コピーボタン
+
+## Code Style
+
+- Railsの規約に従う
+- ビューはERBを使用
+- JavaScriptはHotwire/Turboを優先、必要に応じてStimulus
+- 日本語コメント可
