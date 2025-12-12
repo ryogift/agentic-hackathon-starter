@@ -6,6 +6,7 @@
   let groups: ShuffleGroup[] = [];
   let isLoading = false;
   let error = '';
+  let isRestaurantOpen = false;
 
   async function handleShuffle() {
     const participantList = participants.trim().split('\n').filter(p => p.trim());
@@ -37,35 +38,44 @@
 
   function copyToClipboard() {
     const slackText = groups.map(group => 
-      `【グループ${group.id}】 ${group.restaurant}\n${group.members.join(', ')}`
-    ).join('\n\n');
+      `[${group.groupName}] ${group.members.join(', ')} @ ${group.restaurant}`
+    ).join('\n');
 
     navigator.clipboard.writeText(slackText);
+  }
+
+  function toggleRestaurant() {
+    isRestaurantOpen = !isRestaurantOpen;
   }
 </script>
 
 <div class="container">
-  <h1>シャッフルランチアプリ</h1>
+  <h1>Shuffle Lunch</h1>
   
   <div class="main-content">
     <!-- 左カラム：入力エリア -->
     <div class="left-column">
       <div class="input-section">
-        <h2>参加者リスト</h2>
+        <h2>参加者リスト（1行に1名）</h2>
         <textarea
           bind:value={participants}
-          placeholder="参加者名を改行区切りで入力&#10;例：&#10;田中太郎&#10;佐藤花子&#10;鈴木次郎"
+          placeholder="名前を入力..."
           rows="8"
         ></textarea>
       </div>
 
-      <div class="input-section">
-        <h2>店舗リスト</h2>
-        <textarea
-          bind:value={restaurants}
-          placeholder="店舗名を改行区切りで入力"
-          rows="6"
-        ></textarea>
+      <div class="input-section accordion-section">
+        <button class="accordion-header" on:click={toggleRestaurant}>
+          <h2>お店リスト（1行に1店舗）</h2>
+          <span class="accordion-icon" class:open={isRestaurantOpen}>▼</span>
+        </button>
+        {#if isRestaurantOpen}
+          <textarea
+            bind:value={restaurants}
+            placeholder="店舗名を改行区切りで入力"
+            rows="6"
+          ></textarea>
+        {/if}
       </div>
 
       <button 
@@ -73,7 +83,7 @@
         disabled={isLoading}
         class="shuffle-btn"
       >
-        {isLoading ? 'シャッフル中...' : 'シャッフル実行'}
+        {isLoading ? 'シャッフル中...' : 'シャッフルする！'}
       </button>
 
       {#if error}
@@ -87,15 +97,15 @@
         <div class="results-header">
           <h2>グループ分け結果</h2>
           <button on:click={copyToClipboard} class="copy-btn">
-            Slack用にコピー
+            結果をテキストでコピー
           </button>
         </div>
 
         <div class="groups-grid">
           {#each groups as group}
             <div class="group-card">
-              <h3>グループ {group.id}</h3>
-              <div class="restaurant">{group.restaurant}</div>
+              <h3>{group.groupName}</h3>
+              <div class="restaurant">@ {group.restaurant}</div>
               <div class="members">
                 {#each group.members as member}
                   <span class="member">{member}</span>
@@ -106,7 +116,7 @@
         </div>
       {:else}
         <div class="placeholder">
-          <p>シャッフル結果がここに表示されます</p>
+          <p>メンバーを入力してシャッフルしてください</p>
         </div>
       {/if}
     </div>
@@ -265,6 +275,36 @@
     border: 1px solid rgba(255, 107, 107, 0.2);
     border-radius: 12px;
     font-weight: 500;
+  }
+
+  .accordion-section {
+    margin-bottom: 28px;
+  }
+
+  .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 12px;
+  }
+
+  .accordion-header h2 {
+    margin: 0;
+  }
+
+  .accordion-icon {
+    color: white;
+    font-size: 14px;
+    transition: transform 0.3s ease;
+  }
+
+  .accordion-icon.open {
+    transform: rotate(180deg);
   }
 
   .results-header {

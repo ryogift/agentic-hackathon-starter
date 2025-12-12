@@ -24,6 +24,7 @@ class Api::ShufflesController < ApplicationController
       groups: groups.map.with_index(1) do |group, index|
         {
           id: index,
+          groupName: group[:group_name],
           members: group[:members],
           restaurant: group[:restaurant]
         }

@@ -9,6 +9,7 @@ export interface ShuffleRequest {
 
 export interface ShuffleGroup {
   id: number;
+  groupName: string;
   members: string[];
   restaurant: string;
 }
