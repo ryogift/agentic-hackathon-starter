@@ -365,6 +365,7 @@ DEPENDENCIES
   capybara
   debug
   kamal
+  nokogiri
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.4)

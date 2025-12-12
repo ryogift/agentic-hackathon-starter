@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { shuffleService, type ShuffleGroup } from '$lib/api';
+  import { shuffleService, restaurantService, type ShuffleGroup } from '$lib/api';
 
   let participants = '佐藤\n鈴木\n高橋\n田中\n伊藤\n渡辺\n山本\n中村\n小林\n加藤\n吉田';
   let restaurants = '中華料理店\nイタリアン\n和食レストラン\nカフェ\nファミレス';
   let groups: ShuffleGroup[] = [];
   let isLoading = false;
   let error = '';
-  let isRestaurantOpen = false;
+  let isFetchingRestaurants = false;
+  let restaurantError = '';
 
   async function handleShuffle() {
     const participantList = participants.trim().split('\n').filter(p => p.trim());
@@ -44,8 +45,18 @@
     navigator.clipboard.writeText(slackText);
   }
 
-  function toggleRestaurant() {
-    isRestaurantOpen = !isRestaurantOpen;
+  async function handleFetchRestaurants() {
+    isFetchingRestaurants = true;
+    restaurantError = '';
+    try {
+      const result = await restaurantService.fetchNearby();
+      restaurants = result.map(r => r.name).join('\n');
+    } catch (err) {
+      restaurantError = '店舗情報の取得に失敗しました';
+      console.error(err);
+    } finally {
+      isFetchingRestaurants = false;
+    }
   }
 </script>
 
@@ -64,18 +75,23 @@
         ></textarea>
       </div>
 
-      <div class="input-section accordion-section">
-        <button class="accordion-header" on:click={toggleRestaurant}>
-          <h2>お店リスト（1行に1店舗）</h2>
-          <span class="accordion-icon" class:open={isRestaurantOpen}>▼</span>
+      <div class="input-section">
+        <h2>お店リスト（1行に1店舗）</h2>
+        <button
+          class="fetch-btn"
+          on:click={handleFetchRestaurants}
+          disabled={isFetchingRestaurants}
+        >
+          {isFetchingRestaurants ? '取得中...' : '周辺のお店を取得'}
         </button>
-        {#if isRestaurantOpen}
-          <textarea
-            bind:value={restaurants}
-            placeholder="店舗名を改行区切りで入力"
-            rows="6"
-          ></textarea>
+        {#if restaurantError}
+          <div class="error restaurant-error">{restaurantError}</div>
         {/if}
+        <textarea
+          bind:value={restaurants}
+          placeholder="店舗名を改行区切りで入力"
+          rows="6"
+        ></textarea>
       </div>
 
       <button 
@@ -305,6 +321,37 @@
 
   .accordion-icon.open {
     transform: rotate(180deg);
+  }
+
+  .fetch-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 24px rgba(240, 147, 251, 0.3);
+  }
+
+  .fetch-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(240, 147, 251, 0.4);
+  }
+
+  .fetch-btn:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    color: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+  }
+
+  .restaurant-error {
+    margin-bottom: 12px;
   }
 
   .results-header {

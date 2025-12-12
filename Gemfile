@@ -8,6 +8,8 @@ gem "sqlite3", ">= 2.1"
 gem "puma", ">= 5.0"
 # Handle Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
+# Web scraping with Nokogiri
+gem "nokogiri"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
