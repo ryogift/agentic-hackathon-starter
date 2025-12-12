@@ -7,13 +7,20 @@ vi.mock("$lib/api", () => ({
   shuffleService: {
     createShuffle: vi.fn(),
   },
+  restaurantService: {
+    fetchNearby: vi.fn(),
+    fetchGenres: vi.fn(),
+  },
 }));
 
-import { shuffleService } from "$lib/api";
+import { shuffleService, restaurantService } from "$lib/api";
 
 describe("+page.svelte", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // デフォルトで空の店舗リストとジャンルを返す
+    vi.mocked(restaurantService.fetchNearby).mockResolvedValue([]);
+    vi.mocked(restaurantService.fetchGenres).mockResolvedValue([]);
   });
 
   describe("初期表示", () => {
@@ -31,7 +38,7 @@ describe("+page.svelte", () => {
 
     it("店舗リストのラベルが表示される", () => {
       render(Page);
-      expect(screen.getByText("お店リスト（1行に1店舗）")).toBeInTheDocument();
+      expect(screen.getByText("お店リスト")).toBeInTheDocument();
     });
 
     it("シャッフルボタンが表示される", () => {
@@ -46,40 +53,6 @@ describe("+page.svelte", () => {
       expect(
         screen.getByText("メンバーを入力してシャッフルしてください"),
       ).toBeInTheDocument();
-    });
-  });
-
-  describe("アコーディオン", () => {
-    it("初期状態では店舗リストのテキストエリアは非表示", () => {
-      render(Page);
-      const textareas = screen.getAllByRole("textbox");
-      // 参加者リストのテキストエリアのみ表示
-      expect(textareas).toHaveLength(1);
-    });
-
-    it("アコーディオンをクリックすると店舗リストが表示される", async () => {
-      render(Page);
-
-      const accordionButton = screen.getByRole("button", {
-        name: /お店リスト/,
-      });
-      await fireEvent.click(accordionButton);
-
-      const textareas = screen.getAllByRole("textbox");
-      expect(textareas).toHaveLength(2);
-    });
-
-    it("再度クリックすると店舗リストが非表示になる", async () => {
-      render(Page);
-
-      const accordionButton = screen.getByRole("button", {
-        name: /お店リスト/,
-      });
-      await fireEvent.click(accordionButton);
-      await fireEvent.click(accordionButton);
-
-      const textareas = screen.getAllByRole("textbox");
-      expect(textareas).toHaveLength(1);
     });
   });
 
@@ -103,6 +76,10 @@ describe("+page.svelte", () => {
     it("参加者が空でエラーメッセージが表示される", async () => {
       render(Page);
 
+      // 参加者を空にする
+      const textarea = screen.getByPlaceholderText("名前を入力...");
+      await fireEvent.input(textarea, { target: { value: "" } });
+
       const shuffleButton = screen.getByRole("button", {
         name: "シャッフルする！",
       });
@@ -113,7 +90,7 @@ describe("+page.svelte", () => {
       ).toBeInTheDocument();
     });
 
-    it("店舗リストが空でエラーメッセージが表示される", async () => {
+    it("店舗が選択されていない場合エラーメッセージが表示される", async () => {
       render(Page);
 
       // 参加者を入力
@@ -122,30 +99,33 @@ describe("+page.svelte", () => {
         target: { value: "佐藤\n鈴木\n田中" },
       });
 
-      // アコーディオンを開いて店舗リストをクリア
-      const accordionButton = screen.getByRole("button", {
-        name: /お店リスト/,
-      });
-      await fireEvent.click(accordionButton);
-
-      const restaurantTextarea =
-        screen.getByPlaceholderText("店舗名を改行区切りで入力");
-      await fireEvent.input(restaurantTextarea, { target: { value: "" } });
-
-      // シャッフル実行
+      // シャッフル実行（店舗未選択）
       const shuffleButton = screen.getByRole("button", {
         name: "シャッフルする！",
       });
       await fireEvent.click(shuffleButton);
 
       expect(
-        screen.getByText("店舗を1つ以上入力してください"),
+        screen.getByText("店舗を1つ以上選択してください"),
       ).toBeInTheDocument();
     });
   });
 
   describe("シャッフル実行", () => {
     it("シャッフル成功時にグループが表示される", async () => {
+      const mockRestaurants = [
+        {
+          name: "中華料理店",
+          genre: "中華",
+          imageUrl: "",
+          rating: null,
+          url: "",
+        },
+      ];
+      vi.mocked(restaurantService.fetchNearby).mockResolvedValue(
+        mockRestaurants,
+      );
+
       const mockResponse = {
         groups: [
           {
@@ -159,6 +139,11 @@ describe("+page.svelte", () => {
       vi.mocked(shuffleService.createShuffle).mockResolvedValue(mockResponse);
 
       render(Page);
+
+      // 店舗データの読み込みを待つ
+      await vi.waitFor(() => {
+        expect(restaurantService.fetchNearby).toHaveBeenCalled();
+      });
 
       const textarea = screen.getByPlaceholderText("名前を入力...");
       await fireEvent.input(textarea, {
@@ -179,6 +164,19 @@ describe("+page.svelte", () => {
     });
 
     it("シャッフル成功時にコピーボタンが表示される", async () => {
+      const mockRestaurants = [
+        {
+          name: "中華料理店",
+          genre: "中華",
+          imageUrl: "",
+          rating: null,
+          url: "",
+        },
+      ];
+      vi.mocked(restaurantService.fetchNearby).mockResolvedValue(
+        mockRestaurants,
+      );
+
       const mockResponse = {
         groups: [
           {
@@ -192,6 +190,10 @@ describe("+page.svelte", () => {
       vi.mocked(shuffleService.createShuffle).mockResolvedValue(mockResponse);
 
       render(Page);
+
+      await vi.waitFor(() => {
+        expect(restaurantService.fetchNearby).toHaveBeenCalled();
+      });
 
       const textarea = screen.getByPlaceholderText("名前を入力...");
       await fireEvent.input(textarea, {
@@ -211,11 +213,27 @@ describe("+page.svelte", () => {
     });
 
     it("API エラー時にエラーメッセージが表示される", async () => {
+      const mockRestaurants = [
+        {
+          name: "中華料理店",
+          genre: "中華",
+          imageUrl: "",
+          rating: null,
+          url: "",
+        },
+      ];
+      vi.mocked(restaurantService.fetchNearby).mockResolvedValue(
+        mockRestaurants,
+      );
       vi.mocked(shuffleService.createShuffle).mockRejectedValue(
         new Error("API Error"),
       );
 
       render(Page);
+
+      await vi.waitFor(() => {
+        expect(restaurantService.fetchNearby).toHaveBeenCalled();
+      });
 
       const textarea = screen.getByPlaceholderText("名前を入力...");
       await fireEvent.input(textarea, {
@@ -237,6 +255,26 @@ describe("+page.svelte", () => {
 
   describe("コピー機能", () => {
     it("コピーボタンをクリックするとクリップボードにコピーされる", async () => {
+      const mockRestaurants = [
+        {
+          name: "中華料理店",
+          genre: "中華",
+          imageUrl: "",
+          rating: null,
+          url: "",
+        },
+        {
+          name: "イタリアン",
+          genre: "洋食",
+          imageUrl: "",
+          rating: null,
+          url: "",
+        },
+      ];
+      vi.mocked(restaurantService.fetchNearby).mockResolvedValue(
+        mockRestaurants,
+      );
+
       const mockResponse = {
         groups: [
           {
@@ -263,6 +301,10 @@ describe("+page.svelte", () => {
 
       render(Page);
 
+      await vi.waitFor(() => {
+        expect(restaurantService.fetchNearby).toHaveBeenCalled();
+      });
+
       const textarea = screen.getByPlaceholderText("名前を入力...");
       await fireEvent.input(textarea, {
         target: { value: "佐藤\n鈴木\n田中\n高橋" },
@@ -284,8 +326,9 @@ describe("+page.svelte", () => {
       });
       await fireEvent.click(copyButton);
 
+      // URLがないので基本フォーマットでコピー
       expect(writeTextMock).toHaveBeenCalledWith(
-        "[Team A] 佐藤, 鈴木 @ 中華料理店\n[Team B] 田中, 高橋 @ イタリアン",
+        "[Team A] 佐藤, 鈴木 @ 中華料理店\n\n[Team B] 田中, 高橋 @ イタリアン",
       );
     });
   });
