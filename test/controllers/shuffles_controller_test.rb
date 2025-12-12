@@ -90,7 +90,7 @@ class ShufflesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     # デフォルト店舗のいずれかが含まれている
-    default_restaurants = ["イタリアン トラットリア", "定食屋 まんぷく", "中華料理 萬来", "カレーハウス スパイス", "蕎麦処 やぶ"]
+    default_restaurants = [ "イタリアン トラットリア", "定食屋 まんぷく", "中華料理 萬来", "カレーハウス スパイス", "蕎麦処 やぶ" ]
     assert default_restaurants.any? { |r| response.body.include?(r) }
   end
 

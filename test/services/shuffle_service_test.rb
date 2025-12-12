@@ -2,11 +2,11 @@ require "test_helper"
 
 class ShuffleServiceTest < ActiveSupport::TestCase
   def setup
-    @restaurants = ["店舗A", "店舗B", "店舗C"]
+    @restaurants = [ "店舗A", "店舗B", "店舗C" ]
   end
 
   test "3名の場合は1グループ（3名）になる" do
-    members = ["佐藤", "鈴木", "田中"]
+    members = [ "佐藤", "鈴木", "田中" ]
     result = ShuffleService.new(members, @restaurants).call
 
     assert_equal 1, result.length
@@ -15,7 +15,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
   end
 
   test "4名の場合は1グループ（4名）になる" do
-    members = ["佐藤", "鈴木", "田中", "高橋"]
+    members = [ "佐藤", "鈴木", "田中", "高橋" ]
     result = ShuffleService.new(members, @restaurants).call
 
     assert_equal 1, result.length
@@ -23,7 +23,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
   end
 
   test "5名の場合は1グループ（5名）になる（特例）" do
-    members = ["佐藤", "鈴木", "田中", "高橋", "伊藤"]
+    members = [ "佐藤", "鈴木", "田中", "高橋", "伊藤" ]
     result = ShuffleService.new(members, @restaurants).call
 
     assert_equal 1, result.length
@@ -36,7 +36,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 2, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [3, 3], group_sizes
+    assert_equal [ 3, 3 ], group_sizes
   end
 
   test "7名の場合は2グループ（4+3）になる" do
@@ -45,7 +45,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 2, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [3, 4], group_sizes
+    assert_equal [ 3, 4 ], group_sizes
   end
 
   test "8名の場合は2グループ（4+4）になる" do
@@ -54,7 +54,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 2, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [4, 4], group_sizes
+    assert_equal [ 4, 4 ], group_sizes
   end
 
   test "9名の場合は3グループ（3+3+3）になる" do
@@ -63,7 +63,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 3, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [3, 3, 3], group_sizes
+    assert_equal [ 3, 3, 3 ], group_sizes
   end
 
   test "10名の場合は3グループ（4+3+3）になる" do
@@ -72,7 +72,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 3, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [3, 3, 4], group_sizes
+    assert_equal [ 3, 3, 4 ], group_sizes
   end
 
   test "11名の場合は3グループ（4+4+3）になる" do
@@ -81,7 +81,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 3, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [3, 4, 4], group_sizes
+    assert_equal [ 3, 4, 4 ], group_sizes
   end
 
   test "12名の場合は3グループ（4+4+4）になる" do
@@ -90,7 +90,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
 
     assert_equal 3, result.length
     group_sizes = result.map { |g| g[:members].length }.sort
-    assert_equal [4, 4, 4], group_sizes
+    assert_equal [ 4, 4, 4 ], group_sizes
   end
 
   test "全メンバーがグループに含まれる" do
@@ -114,7 +114,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
     members = (1..10).map { |i| "メンバー#{i}" }
     result = ShuffleService.new(members, @restaurants).call
 
-    expected_names = ["Team A", "Team B", "Team C"]
+    expected_names = [ "Team A", "Team B", "Team C" ]
     actual_names = result.map { |g| g[:group_name] }
     assert_equal expected_names, actual_names
   end
@@ -132,7 +132,7 @@ class ShuffleServiceTest < ActiveSupport::TestCase
   end
 
   test "2名以下の場合は空配列を返す" do
-    members = ["佐藤", "鈴木"]
+    members = [ "佐藤", "鈴木" ]
     result = ShuffleService.new(members, @restaurants).call
 
     assert_equal [], result

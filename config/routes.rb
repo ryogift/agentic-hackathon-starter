@@ -7,8 +7,8 @@ Rails.application.routes.draw do
 
   # API routes for Svelte frontend
   namespace :api do
-    resources :shuffles, only: [:create]
-    get 'restaurants/nearby', to: 'restaurants#nearby'
-    get 'restaurants/genres', to: 'restaurants#genres'
+    resources :shuffles, only: [ :create ]
+    get "restaurants/nearby", to: "restaurants#nearby"
+    get "restaurants/genres", to: "restaurants#genres"
   end
 end
