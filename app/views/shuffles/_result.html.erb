@@ -1,0 +1,45 @@
+<% if @error.present? %>
+  <div class="error-message">
+    <p><%= @error %></p>
+  </div>
+<% elsif @groups.present? %>
+  <div class="result-content" data-controller="clipboard">
+    <div class="result-header">
+      <h2>シャッフル結果</h2>
+      <div class="result-actions">
+        <button type="button" class="btn btn-secondary" data-action="click->clipboard#copy" data-clipboard-target="button">
+          結果をテキストでコピー
+        </button>
+      </div>
+    </div>
+
+    <div class="groups-container">
+      <% @groups.each do |group| %>
+        <div class="group-card">
+          <div class="group-header">
+            <span class="group-name"><%= group[:group_name] %></span>
+            <span class="group-count"><%= group[:members].length %>名</span>
+          </div>
+          <div class="group-members">
+            <% group[:members].each do |member| %>
+              <span class="member-badge"><%= member %></span>
+            <% end %>
+          </div>
+          <div class="group-restaurant">
+            <span class="restaurant-icon">@</span>
+            <span class="restaurant-name"><%= group[:restaurant] %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="copy-text" data-clipboard-target="text" style="display: none;">
+<% @groups.each do |group| %>[<%= group[:group_name] %>] <%= group[:members].join(", ") %> @ <%= group[:restaurant] %>
+<% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="result-placeholder">
+    <p>参加者を入力してシャッフルしてください</p>
+  </div>
+<% end %>

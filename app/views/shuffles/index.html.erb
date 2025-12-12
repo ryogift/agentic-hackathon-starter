@@ -1,0 +1,45 @@
+<% content_for(:title) { "Shuffle Lunch" } %>
+
+<div class="container" data-controller="shuffle">
+  <header class="header">
+    <h1>Shuffle Lunch</h1>
+    <p class="subtitle">ランダムにグループを作ってランチに行こう</p>
+  </header>
+
+  <main class="main-content">
+    <section class="input-section">
+      <%= form_with url: shuffles_path, method: :post, data: { turbo_stream: true } do |f| %>
+        <div class="input-group">
+          <label for="members">参加者リスト（1行に1名）</label>
+          <%= text_area_tag :members, nil,
+              placeholder: "佐藤\n鈴木\n田中\n高橋\n伊藤\n渡辺\n山本",
+              rows: 10,
+              class: "textarea" %>
+        </div>
+
+        <div class="input-group" data-controller="accordion">
+          <button type="button" class="accordion-toggle" data-action="click->accordion#toggle">
+            <span>お店リスト（1行に1店舗）</span>
+            <span class="accordion-icon" data-accordion-target="icon">+</span>
+          </button>
+          <div class="accordion-content" data-accordion-target="content" hidden>
+            <%= text_area_tag :restaurants, @default_restaurants,
+                placeholder: "店舗名を入力...",
+                rows: 6,
+                class: "textarea" %>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <%= submit_tag "シャッフルする！", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </section>
+
+    <section class="result-section" id="result-container">
+      <div class="result-placeholder">
+        <p>参加者を入力してシャッフルしてください</p>
+      </div>
+    </section>
+  </main>
+</div>
