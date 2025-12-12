@@ -1,7 +1,7 @@
 class Api::ShufflesController < ApplicationController
   DEFAULT_RESTAURANTS = [
     "中華料理店",
-    "イタリアン", 
+    "イタリアン",
     "和食レストラン",
     "カフェ",
     "ファミレス"
@@ -12,15 +12,15 @@ class Api::ShufflesController < ApplicationController
     restaurants = parse_restaurants(params[:restaurants])
 
     if participants.length < 3
-      render json: { 
-        error: "参加者は3名以上必要です" 
+      render json: {
+        error: "参加者は3名以上必要です"
       }, status: :unprocessable_entity
       return
     end
 
     groups = ShuffleService.new(participants, restaurants).call
-    
-    render json: { 
+
+    render json: {
       groups: groups.map.with_index(1) do |group, index|
         {
           id: index,
@@ -35,7 +35,7 @@ class Api::ShufflesController < ApplicationController
 
   def parse_participants(participants_array)
     return [] if participants_array.blank?
-    
+
     participants_array.map(&:strip)
                      .reject(&:blank?)
                      .uniq
