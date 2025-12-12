@@ -1,3 +1,4 @@
+aaaa
 # Agentic Hackathon Starter
 
 ハッカソン用のスターターテンプレート。複数の言語・フレームワークに対応したDevcontainer環境を提供します。
