@@ -50,13 +50,22 @@ class TabelogScraperService
     uri = URI.parse(TABELOG_URL)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE # 開発環境用
+    http.verify_mode = ssl_verify_mode
 
     request = Net::HTTP::Get.new(uri.request_uri)
     request["User-Agent"] = USER_AGENT
 
     response = http.request(request)
     response.body
+  end
+
+  def ssl_verify_mode
+    # 本番環境では検証を有効化、開発/テスト環境ではスキップ
+    if Rails.env.production?
+      OpenSSL::SSL::VERIFY_PEER
+    else
+      OpenSSL::SSL::VERIFY_NONE
+    end
   end
 
   def parse_restaurants(html)
