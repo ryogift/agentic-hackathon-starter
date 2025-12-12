@@ -1,8 +1,8 @@
-class ShufflesController < ApplicationController
+class Api::ShufflesController < ApplicationController
   DEFAULT_RESTAURANTS = [
     "中華料理店",
-    "イタリアン",
-    "和食レストラン", 
+    "イタリアン", 
+    "和食レストラン",
     "カフェ",
     "ファミレス"
   ].freeze

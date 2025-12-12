@@ -45,18 +45,17 @@ http://localhost:8080 でサーバーが起動します。
 
 ```sh
 # Railsサービスを起動
-docker-compose up rails
+docker compose up rails-api svelte-frontend
 
 # バックグラウンドで起動
-docker-compose up -d rails
+docker compose up -d rails
 
 # Rails コンソールにアクセス
-docker-compose exec rails bin/rails console
+docker compose exec rails bin/rails console
 
 # 依存関係の追加後
-docker-compose exec rails bundle install
+docker compose exec rails bundle install
 ```
-
 
 VS Code Dev Containersを使用しています。
 
