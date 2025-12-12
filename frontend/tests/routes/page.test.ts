@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
-import Page from './+page.svelte';
+import Page from '../../src/routes/+page.svelte';
 
 // API モック
 vi.mock('$lib/api', () => ({

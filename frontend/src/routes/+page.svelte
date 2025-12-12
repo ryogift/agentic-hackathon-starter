@@ -1,7 +1,7 @@
 <script lang="ts">
   import { shuffleService, type ShuffleGroup } from '$lib/api';
 
-  let participants = '';
+  let participants = '佐藤\n鈴木\n高橋\n田中\n伊藤\n渡辺\n山本\n中村\n小林\n加藤\n吉田';
   let restaurants = '中華料理店\nイタリアン\n和食レストラン\nカフェ\nファミレス';
   let groups: ShuffleGroup[] = [];
   let isLoading = false;
