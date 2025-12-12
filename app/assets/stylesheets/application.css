@@ -8,3 +8,329 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.header .subtitle {
+  margin: 10px 0 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Main Content - Two Column Layout */
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sections */
+.input-section,
+.result-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Input Groups */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+}
+
+.textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e5eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.textarea::placeholder {
+  color: #adb5bd;
+}
+
+/* Accordion */
+.accordion-toggle {
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border: 2px solid #e1e5eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.accordion-toggle:hover {
+  background: #e9ecef;
+}
+
+.accordion-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.accordion-content {
+  margin-top: 12px;
+}
+
+/* Buttons */
+.button-group {
+  margin-top: 24px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 1.1rem;
+  padding: 16px 24px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.btn-secondary.copied {
+  background: #28a745;
+}
+
+/* Result Section */
+.result-placeholder {
+  text-align: center;
+  padding: 60px 20px;
+  color: #adb5bd;
+}
+
+.result-placeholder p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.result-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.result-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Groups Container */
+.groups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Group Card */
+.group-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 4px solid #667eea;
+}
+
+.group-card:nth-child(2) {
+  border-left-color: #28a745;
+}
+
+.group-card:nth-child(3) {
+  border-left-color: #ffc107;
+}
+
+.group-card:nth-child(4) {
+  border-left-color: #dc3545;
+}
+
+.group-card:nth-child(5) {
+  border-left-color: #17a2b8;
+}
+
+.group-card:nth-child(6) {
+  border-left-color: #6f42c1;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.group-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.group-count {
+  font-size: 0.85rem;
+  color: #6c757d;
+  background: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.group-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.member-badge {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #444;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.group-restaurant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e1e5eb;
+}
+
+.restaurant-icon {
+  font-weight: 700;
+  color: #667eea;
+}
+
+.restaurant-name {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Error Message */
+.error-message {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 16px;
+  color: #721c24;
+  text-align: center;
+}
+
+.error-message p {
+  margin: 0;
+}
