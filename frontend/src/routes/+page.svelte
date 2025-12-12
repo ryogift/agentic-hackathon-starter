@@ -410,63 +410,6 @@
     font-weight: 500;
   }
 
-  .accordion-section {
-    margin-bottom: 28px;
-  }
-
-  .accordion-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-bottom: 12px;
-  }
-
-  .accordion-header h2 {
-    margin: 0;
-  }
-
-  .accordion-icon {
-    color: white;
-    font-size: 14px;
-    transition: transform 0.3s ease;
-  }
-
-  .accordion-icon.open {
-    transform: rotate(180deg);
-  }
-
-  .fetch-btn {
-    width: 100%;
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 6px 24px rgba(240, 147, 251, 0.3);
-  }
-
-  .fetch-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(240, 147, 251, 0.4);
-  }
-
-  .fetch-btn:disabled {
-    background: rgba(255, 255, 255, 0.2);
-    cursor: not-allowed;
-    color: rgba(255, 255, 255, 0.5);
-    box-shadow: none;
-  }
-
   .restaurant-error {
     margin-bottom: 12px;
   }

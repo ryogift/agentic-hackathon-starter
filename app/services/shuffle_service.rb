@@ -17,15 +17,15 @@ class ShuffleService
     return [] if n < 3
 
     case n
-    when 3 then [3]
-    when 4 then [4]
-    when 5 then [5]
-    when 6 then [3, 3]
-    when 7 then [4, 3]
-    when 8 then [4, 4]
-    when 9 then [3, 3, 3]
-    when 10 then [4, 3, 3]
-    when 11 then [4, 4, 3]
+    when 3 then [ 3 ]
+    when 4 then [ 4 ]
+    when 5 then [ 5 ]
+    when 6 then [ 3, 3 ]
+    when 7 then [ 4, 3 ]
+    when 8 then [ 4, 4 ]
+    when 9 then [ 3, 3, 3 ]
+    when 10 then [ 4, 3, 3 ]
+    when 11 then [ 4, 4, 3 ]
     else
       calculate_large_group_sizes(n)
     end
